@@ -21,6 +21,8 @@ let comment = "(*" comment_sym* "*)"
 
 let unit = '(' ' '* ')'
 
+let sep = ";;"
+
 rule read =
     parse
     | white     { read lexbuf }
@@ -65,6 +67,7 @@ rule read =
     | '<'       { LESS_THAN }
     | "<="      { LESS_THAN_EQUAL }
     | comment   { read lexbuf }
+    | sep       { read lexbuf }
     | unit      { TYPE_UNIT }
     | int       { TYPE_INT (int_of_string (Lexing.lexeme lexbuf)) }
     | string    { let str = Lexing.lexeme lexbuf in
