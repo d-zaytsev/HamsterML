@@ -7,7 +7,6 @@ open HamsterML__Typing;;
 open HamsterML__CC;;
 open HamsterML__PrinterAst;;
 open HamsterML__Compiler;;
-
 open HamsterTest__LexerTest;;
 open HamsterTest__ParserTest;;
 open HamsterTest__TypingTest;;
