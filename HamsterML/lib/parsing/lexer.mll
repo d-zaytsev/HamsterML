@@ -69,8 +69,7 @@ rule read =
     | '<'       { LESS_THAN }
     | "<="      { LESS_THAN_EQUAL }
     | "list"    { LIST }
-    | poly_name { let str = Lexing.lexeme lexbuf in 
-                    POLY (String.sub str 1 (String.length str - 1)) }
+    | poly_name { POLY (Lexing.lexeme lexbuf) }
     | comment   { read lexbuf }
     | sep       { read lexbuf }
     | unit      { TYPE_UNIT }

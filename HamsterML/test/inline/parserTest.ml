@@ -291,7 +291,7 @@ let%test _ =
           , [ Constraint
                 ( Var "f"
                 , PArrow
-                    (PVar "a", PArrow (PVar "b", PTuple [ PVar "c"; PList (PVar "c") ]))
+                    (PVar "'a", PArrow (PVar "'b", PTuple [ PVar "'c"; PList (PVar "'c") ]))
                 )
             ]
           , EConst (Int 10) )

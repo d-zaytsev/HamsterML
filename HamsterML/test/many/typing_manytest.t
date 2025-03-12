@@ -1,3 +1,11 @@
+  $ dune exec TypingRunner <<EOF
+  > let rec map (f: 'a -> 'b) (lst: 'a list) =
+  > match lst with
+  > | [] -> []
+  > | x :: xs -> (f x) :: (map f xs)
+  > EOF
+  val map : ('a -> 'b) -> 'a list -> 'b list
+
   $ dune exec TypingRunner < manytests/typed/001fac.ml
   val fac : int -> int
   val main : int
