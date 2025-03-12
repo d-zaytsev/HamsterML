@@ -1,1 +1,4 @@
 _[^_]*
+.gdb_history
+.gdbinit
+

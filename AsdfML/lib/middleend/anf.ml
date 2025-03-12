@@ -98,11 +98,10 @@ let rec anf_expr
 
 let anf_def env (def : cf_definition) =
   match def with
-  | CFLet (id, args, expr) ->
+  | CFLet (flag, id, args, expr) ->
     let env = List.fold args ~init:env ~f:Set.add in
-    let env = Set.add env id in
     let* aexpr = anf_expr env expr (fun x -> return (ACExpr (CImmExpr x))) in
-    return (Fn (id, args, aexpr), env)
+    return (Fn (flag, id, args, aexpr), env)
 ;;
 
 let default_env =
@@ -131,7 +130,7 @@ let remove_useless_bindings fn =
       | ACExpr c -> ACExpr (useless_c c)
     in
     function
-    | Fn (id, args, a) -> Fn (id, args, useless_a a)
+    | Fn (f, id, args, a) -> Fn (f, id, args, useless_a a)
   in
   let remap =
     let rec remap_i = function
@@ -149,12 +148,19 @@ let remove_useless_bindings fn =
       | ACExpr c -> ACExpr (remap_c c)
     in
     function
-    | Fn (id, args, a) -> Fn (id, args, remap_a a)
+    | Fn (f, id, args, a) -> Fn (f, id, args, remap_a a)
   in
   remap (useless fn)
 ;;
 
+let collect_toplevels env =
+  List.fold ~init:env ~f:(fun env ->
+      function
+      | CFLet (_, id, _, _) -> Set.add env id)
+;;
+
 let anf (ast : Cf_ast.program) : Anf_ast.program =
+  let default_env = collect_toplevels default_env ast in
   let helper ast =
     List.fold
       ast
