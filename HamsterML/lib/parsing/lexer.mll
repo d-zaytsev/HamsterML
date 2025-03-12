@@ -17,6 +17,8 @@ let string  = '\"' sym* '\"'
 
 let id = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
 
+let poly_name = '\'' id
+
 let comment = "(*" comment_sym* "*)"
 
 let unit = '(' ' '* ')'
@@ -66,6 +68,9 @@ rule read =
     | ">="      { GREATER_THAN_EQUAL }
     | '<'       { LESS_THAN }
     | "<="      { LESS_THAN_EQUAL }
+    | "list"    { LIST }
+    | poly_name { let str = Lexing.lexeme lexbuf in 
+                    POLY (String.sub str 1 (String.length str - 1)) }
     | comment   { read lexbuf }
     | sep       { read lexbuf }
     | unit      { TYPE_UNIT }
