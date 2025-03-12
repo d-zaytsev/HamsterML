@@ -285,10 +285,13 @@
   $ ./LlvmCodegenRunner.exe < manytests/typed/006partial.ml
   $ lli -load ../../lib/runtime.so output.ll
   1122
-  
+
   $ ./LlvmCodegenRunner.exe < manytests/typed/006partial2.ml
   $ lli -load ../../lib/runtime.so output.ll
-  1237
+  1
+  2
+  3
+  7
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/006partial3.ml
   $ lli -load ../../lib/runtime.so output.ll

@@ -252,10 +252,12 @@ let build_identifier : string -> (state, Llvm.llvalue) t =
 let build_imm_expr : Llvm.llbuilder -> imm_expr -> (state, Llvm.llvalue) t =
   fun _ -> function
   | ImmBool b -> return (Llvm.const_int i64_t (nat2ml (Bool.to_int b)))
-  | ImmInt i -> return (Llvm.const_int i64_t (nat2ml i))
+  | ImmInt i ->
+    (* Use consistent encoding for all integers *)
+    return (Llvm.const_int i64_t (nat2ml i))
   | ImmId id_name -> build_identifier id_name
   | ImmString s -> return (Llvm.const_int i64_t (nat2ml (String.length s)))
-  | ImmUnit -> return (Llvm.const_int i64_t (nat2ml 0))
+  | ImmUnit -> return (Llvm.const_int i64_t 1) (* ML encoded 0 is 1 *)
   | ImmTuple _ | ImmList _ -> failwith "Lists and tuples are not implemented in codegen"
   | ImmOperation op ->
     (match op with
@@ -290,6 +292,19 @@ let cimm_list_to_imm_list lst =
 let rec build_cexpr : Llvm.llbuilder -> cexpr -> (state, Llvm.llvalue) t =
   fun builder -> function
   | CImm imm -> build_imm_expr builder imm
+  | CApplication (CImm (ImmOperation op), CImm imm_arg_hd, []) ->
+    (match op with
+     | Unary UMINUS ->
+       let* arg = build_imm_expr builder imm_arg_hd in
+       (* For ML-encoded integers (n lsl 1) + 1, negation should be (-n lsl 1) + 1
+          which equals -((n lsl 1) + 1) + 2 or -arg + 2 *)
+       return
+         (Llvm.build_add
+            (Llvm.build_neg arg "" builder)
+            (Llvm.const_int i64_t 2)
+            ""
+            builder)
+     | _ -> failwith "No other unary operators allowed")
   | CApplication (CImm (ImmId fun_name as imm_fun_c), CImm imm_arg_hd, imm_arg_tl) ->
     let imm_arg_tl = cimm_list_to_imm_list imm_arg_tl in
     let* args_val = map_list (build_imm_expr builder) (imm_arg_hd :: imm_arg_tl) in
@@ -311,10 +326,14 @@ let rec build_cexpr : Llvm.llbuilder -> cexpr -> (state, Llvm.llvalue) t =
           let* fun_c = build_imm_expr builder imm_fun_c in
           build_apply_closure builder fun_c args_val))
   | CApplication (fun_expr, arg_hd, arg_tl) ->
-    let* fun_val = build_cexpr builder fun_expr in
+    (* Evaluate arguments from right to left *)
+    let rev_args = List.rev arg_tl in
+    let* arg_tl_vals_rev = map_list (build_cexpr builder) rev_args in
     let* arg_hd_val = build_cexpr builder arg_hd in
-    let* arg_tl_vals = map_list (build_cexpr builder) arg_tl in
-    build_apply_closure builder fun_val (arg_hd_val :: arg_tl_vals)
+    let* fun_val = build_cexpr builder fun_expr in
+    (* Reconstruct arguments in original order *)
+    let arg_vals = arg_hd_val :: List.rev arg_tl_vals_rev in
+    build_apply_closure builder fun_val arg_vals
   | CIf (imm_flag, then_body, else_body) ->
     let* flag = build_imm_expr builder imm_flag in
     let bool1 =
