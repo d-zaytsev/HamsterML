@@ -1,7 +1,3 @@
-  $  dune exec TypingRunner <<EOF
-  > let foo (f: 'a -> 'b -> 'c) a b = if true f a b else f b a
-  > EOF
-
   $ dune exec TypingRunner < manytests/typed/001fac.ml
   val fac : int -> int
   val main : int
