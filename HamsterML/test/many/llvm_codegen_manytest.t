@@ -114,7 +114,8 @@
     ret i64 %0
   }
  
-  $ lli-16 -load ../../lib/runtime.so output.ll
+  $ clang-16 output.ll -Wno-override-module -o output_executable ../../lib/runtime.so -lffi
+  $ ./output_executable
   1
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/001fac.ml
@@ -259,48 +260,57 @@
     ret i64 1
   }
 
-  $ lli-16 -load ../../lib/runtime.so output.ll
+  $ clang-16 output.ll -Wno-override-module -o output_executable ../../lib/runtime.so -lffi
+  $ ./output_executable
   24
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/002fac.ml
-  $ lli-16 -load ../../lib/runtime.so output.ll
+  $ clang-16 output.ll -Wno-override-module -o output_executable ../../lib/runtime.so -lffi
+  $ ./output_executable
   24
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/003fib.ml
-  $ lli-16 -load ../../lib/runtime.so output.ll
+  $ clang-16 output.ll -Wno-override-module -o output_executable ../../lib/runtime.so -lffi
+  $ ./output_executable
   3
   3
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/004manyargs.ml
-  $ lli-16 -load ../../lib/runtime.so output.ll
+  $ clang-16 output.ll -Wno-override-module -o output_executable ../../lib/runtime.so -lffi
+  $ ./output_executable
   1111111111
   1
   10
   100
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/005fix.ml
-  $ lli-16 -load ../../lib/runtime.so output.ll
+  $ clang-16 output.ll -Wno-override-module -o output_executable ../../lib/runtime.so -lffi
+  $ ./output_executable
   720
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/006partial.ml
-  $ lli-16 -load ../../lib/runtime.so output.ll
+  $ clang-16 output.ll -Wno-override-module -o output_executable ../../lib/runtime.so -lffi
+  $ ./output_executable
   1122
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/006partial2.ml
-  $ lli-16 -load ../../lib/runtime.so output.ll
+  $ clang-16 output.ll -Wno-override-module -o output_executable ../../lib/runtime.so -lffi
+  $ ./output_executable
   1
   2
   3
   7
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/006partial3.ml
-  $ lli-16 -load ../../lib/runtime.so output.ll
+  $ clang-16 output.ll -Wno-override-module -o output_executable ../../lib/runtime.so -lffi
+  $ ./output_executable
   4
   8
   9
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/007order.ml
-  $ lli-16 -load ../../lib/runtime.so output.ll
+  $ clang-16 output.ll -Wno-override-module -o output_executable ../../lib/runtime.so -lffi
+  $ ./output_executable
   -1
   4
   2
@@ -311,5 +321,6 @@
 
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/008ascription.ml
-  $ lli-16 -load ../../lib/runtime.so output.ll
+  $ clang-16 output.ll -Wno-override-module -o output_executable ../../lib/runtime.so -lffi
+  $ ./output_executable
   8
