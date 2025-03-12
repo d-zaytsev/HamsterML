@@ -20,11 +20,20 @@
  (libraries HamsterTest HamsterML llvm stdio))
 
 (cram
- (applies_to llvm_codegen_manytest)
  (deps
   ./LlvmCodegenRunner.exe
-  ../../_build/default/lib/runtime.so
-  manytests/typed/001fac.ml))
+  ../../lib/runtime.so
+  manytests/typed/001fac.ml
+  manytests/typed/002fac.ml
+  manytests/typed/003fib.ml
+  manytests/typed/004manyargs.ml
+  manytests/typed/005fix.ml
+  manytests/typed/006partial.ml
+  manytests/typed/006partial2.ml
+  manytests/typed/006partial3.ml
+  manytests/typed/007order.ml
+  manytests/typed/008ascription.ml
+  manytests/typed/009let_poly.ml))
 
 (cram
  (deps

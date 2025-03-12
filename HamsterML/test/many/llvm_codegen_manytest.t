@@ -1,227 +1,314 @@
-  $ ./LlvmCodegenRunner.exe << EOF | lli-16 -load ../../lib/runtime.so
-  > let a = print_int 1
-  1
+  $ ./LlvmCodegenRunner.exe <<EOF
+  > let a = print_int 1 
+  > EOF
 
-  $ ./LlvmCodegenRunner.exe < manytests/typed/001fac.ml | lli-16 -load ../../lib/runtime.so
-  24
-
-  $ ./LlvmCodegenRunner.exe << EOF
-  > let a = print_int 1
-  ; ModuleID = 'HamsterML_LLVM_Compiler'
-  source_filename = "HamsterML_LLVM_Compiler"
+  $ cat output.ll
+  ; ModuleID = 'HamsterML'
+  source_filename = "HamsterML"
+  
+  @plus_mlint_glob_llvm = global i64 0
+  @minus_mlint_glob_llvm = global i64 0
+  @mult_mlint_glob_llvm = global i64 0
+  @div_mlint_glob_llvm = global i64 0
+  @l_ml_glob_llvm = global i64 0
+  @le_ml_glob_llvm = global i64 0
+  @g_ml_glob_llvm = global i64 0
+  @ge_ml_glob_llvm = global i64 0
+  @eq_ml_glob_llvm = global i64 0
+  @peq_ml_glob_llvm = global i64 0
+  @neq_ml_glob_llvm = global i64 0
+  @pneq_ml_glob_llvm = global i64 0
+  @print_int_glob_llvm = global i64 0
+  @land_ml_glob_llvm = global i64 0
+  @lor_ml_glob_llvm = global i64 0
+  @ll_var_0_glob_llvm = global i64 0
+  
+  define i64 @init_llvm() {
+  entry:
+    %0 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @plus_mlint to i64), i64 2)
+    store i64 %0, ptr @plus_mlint_glob_llvm, align 4
+    %1 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @minus_mlint to i64), i64 2)
+    store i64 %1, ptr @minus_mlint_glob_llvm, align 4
+    %2 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @mult_mlint to i64), i64 2)
+    store i64 %2, ptr @mult_mlint_glob_llvm, align 4
+    %3 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @div_mlint to i64), i64 2)
+    store i64 %3, ptr @div_mlint_glob_llvm, align 4
+    %4 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @l_ml to i64), i64 2)
+    store i64 %4, ptr @l_ml_glob_llvm, align 4
+    %5 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @le_ml to i64), i64 2)
+    store i64 %5, ptr @le_ml_glob_llvm, align 4
+    %6 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @g_ml to i64), i64 2)
+    store i64 %6, ptr @g_ml_glob_llvm, align 4
+    %7 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @ge_ml to i64), i64 2)
+    store i64 %7, ptr @ge_ml_glob_llvm, align 4
+    %8 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @eq_ml to i64), i64 2)
+    store i64 %8, ptr @eq_ml_glob_llvm, align 4
+    %9 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @peq_ml to i64), i64 2)
+    store i64 %9, ptr @peq_ml_glob_llvm, align 4
+    %10 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @neq_ml to i64), i64 2)
+    store i64 %10, ptr @neq_ml_glob_llvm, align 4
+    %11 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @pneq_ml to i64), i64 2)
+    store i64 %11, ptr @pneq_ml_glob_llvm, align 4
+    %12 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @print_int to i64), i64 1)
+    store i64 %12, ptr @print_int_glob_llvm, align 4
+    %13 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @land_ml to i64), i64 2)
+    store i64 %13, ptr @land_ml_glob_llvm, align 4
+    %14 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @lor_ml to i64), i64 2)
+    store i64 %14, ptr @lor_ml_glob_llvm, align 4
+    ret i64 0
+  }
+  
+  declare i64 @plus_mlint(i64, i64)
+  
+  declare i64 @minus_mlint(i64, i64)
+  
+  declare i64 @mult_mlint(i64, i64)
+  
+  declare i64 @div_mlint(i64, i64)
+  
+  declare i64 @l_ml(i64, i64)
+  
+  declare i64 @le_ml(i64, i64)
+  
+  declare i64 @g_ml(i64, i64)
+  
+  declare i64 @ge_ml(i64, i64)
+  
+  declare i64 @eq_ml(i64, i64)
+  
+  declare i64 @peq_ml(i64, i64)
+  
+  declare i64 @neq_ml(i64, i64)
+  
+  declare i64 @pneq_ml(i64, i64)
   
   declare i64 @print_int(i64)
   
-  define i64 @"+"(i64 %0, i64 %1) {
-  entry:
-    %result = add i64 %0, %1
-    ret i64 %result
-  }
+  declare i64 @land_ml(i64, i64)
   
-  define i64 @-(i64 %0, i64 %1) {
-  entry:
-    %result = sub i64 %0, %1
-    ret i64 %result
-  }
+  declare i64 @lor_ml(i64, i64)
   
-  define i64 @"*"(i64 %0, i64 %1) {
-  entry:
-    %result = mul i64 %0, %1
-    ret i64 %result
-  }
+  declare i64 @mlrt_get_box_field(i64, i64)
   
-  define i64 @"/"(i64 %0, i64 %1) {
-  entry:
-    %result = udiv i64 %0, %1
-    ret i64 %result
-  }
+  declare i64 @mlrt_check_tag(i64, i64)
   
-  define i64 @"<="(i64 %0, i64 %1) {
-  entry:
-    %result = icmp sle i64 %0, %1
-    %extended_result = zext i1 %result to i64
-    ret i64 %extended_result
-  }
+  declare i64 @mltr_match_error(i64)
   
-  define i64 @">="(i64 %0, i64 %1) {
-  entry:
-    %result = icmp sge i64 %0, %1
-    %extended_result = zext i1 %result to i64
-    ret i64 %extended_result
-  }
+  declare i64 @mlrt_create_tuple(i64, ...)
   
-  define i64 @"<"(i64 %0, i64 %1) {
-  entry:
-    %result = icmp slt i64 %0, %1
-    %extended_result = zext i1 %result to i64
-    ret i64 %extended_result
-  }
+  declare i64 @mlrt_create_empty_closure(i64)
   
-  define i64 @">"(i64 %0, i64 %1) {
-  entry:
-    %result = icmp sgt i64 %0, %1
-    %extended_result = zext i1 %result to i64
-    ret i64 %extended_result
-  }
+  declare i64 @mlrt_apply_args_to_closure(i64, i64, ...)
   
-  define i64 @"="(i64 %0, i64 %1) {
+  define i64 @main() {
   entry:
-    %result = icmp eq i64 %0, %1
-    %extended_result = zext i1 %result to i64
-    ret i64 %extended_result
-  }
-  
-  define i64 @"!="(i64 %0, i64 %1) {
-  entry:
-    %result = icmp ne i64 %0, %1
-    %extended_result = zext i1 %result to i64
-    ret i64 %extended_result
+    %0 = call i64 @init_llvm()
+    %ll_var_0_glob_llvm = call i64 @ll_var_0()
+    store i64 %ll_var_0_glob_llvm, ptr @ll_var_0_glob_llvm, align 4
+    ret i64 0
   }
   
   define i64 @ll_var_0() {
   entry:
-    %calltmp = call i64 @print_int(i64 1)
-    %anf_0 = alloca i64, align 8
-    store i64 %calltmp, ptr %anf_0, align 4
-    %anf_01 = load i64, ptr %anf_0, align 4
-    ret i64 %anf_01
+    %0 = call i64 @print_int(i64 3)
+    ret i64 %0
+  }
+ 
+  $ lli -load ../../lib/runtime.so output.ll
+  1
+
+  $ ./LlvmCodegenRunner.exe < manytests/typed/001fac.ml
+
+  $ cat output.ll
+  ; ModuleID = 'HamsterML'
+  source_filename = "HamsterML"
+  
+  @plus_mlint_glob_llvm = global i64 0
+  @minus_mlint_glob_llvm = global i64 0
+  @mult_mlint_glob_llvm = global i64 0
+  @div_mlint_glob_llvm = global i64 0
+  @l_ml_glob_llvm = global i64 0
+  @le_ml_glob_llvm = global i64 0
+  @g_ml_glob_llvm = global i64 0
+  @ge_ml_glob_llvm = global i64 0
+  @eq_ml_glob_llvm = global i64 0
+  @peq_ml_glob_llvm = global i64 0
+  @neq_ml_glob_llvm = global i64 0
+  @pneq_ml_glob_llvm = global i64 0
+  @print_int_glob_llvm = global i64 0
+  @land_ml_glob_llvm = global i64 0
+  @lor_ml_glob_llvm = global i64 0
+  @ll_var_0_glob_llvm = global i64 0
+  @ll_var_1_glob_llvm = global i64 0
+  
+  define i64 @init_llvm() {
+  entry:
+    %0 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @plus_mlint to i64), i64 2)
+    store i64 %0, ptr @plus_mlint_glob_llvm, align 4
+    %1 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @minus_mlint to i64), i64 2)
+    store i64 %1, ptr @minus_mlint_glob_llvm, align 4
+    %2 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @mult_mlint to i64), i64 2)
+    store i64 %2, ptr @mult_mlint_glob_llvm, align 4
+    %3 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @div_mlint to i64), i64 2)
+    store i64 %3, ptr @div_mlint_glob_llvm, align 4
+    %4 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @l_ml to i64), i64 2)
+    store i64 %4, ptr @l_ml_glob_llvm, align 4
+    %5 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @le_ml to i64), i64 2)
+    store i64 %5, ptr @le_ml_glob_llvm, align 4
+    %6 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @g_ml to i64), i64 2)
+    store i64 %6, ptr @g_ml_glob_llvm, align 4
+    %7 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @ge_ml to i64), i64 2)
+    store i64 %7, ptr @ge_ml_glob_llvm, align 4
+    %8 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @eq_ml to i64), i64 2)
+    store i64 %8, ptr @eq_ml_glob_llvm, align 4
+    %9 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @peq_ml to i64), i64 2)
+    store i64 %9, ptr @peq_ml_glob_llvm, align 4
+    %10 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @neq_ml to i64), i64 2)
+    store i64 %10, ptr @neq_ml_glob_llvm, align 4
+    %11 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @pneq_ml to i64), i64 2)
+    store i64 %11, ptr @pneq_ml_glob_llvm, align 4
+    %12 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @print_int to i64), i64 1)
+    store i64 %12, ptr @print_int_glob_llvm, align 4
+    %13 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @land_ml to i64), i64 2)
+    store i64 %13, ptr @land_ml_glob_llvm, align 4
+    %14 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @lor_ml to i64), i64 2)
+    store i64 %14, ptr @lor_ml_glob_llvm, align 4
+    ret i64 0
   }
   
-  define i64 @main() {
-  entry:
-    %main_result = call i64 @ll_var_0()
-    ret i64 %main_result
-  }
-
-  $ ./LlvmCodegenRunner.exe << EOF
-  > let rec fac n = if n<=1 then 1 else n * fac (n-1)
-  > let main = let () = print_int (fac 4) in 0
-  ; ModuleID = 'HamsterML_LLVM_Compiler'
-  source_filename = "HamsterML_LLVM_Compiler"
+  declare i64 @plus_mlint(i64, i64)
+  
+  declare i64 @minus_mlint(i64, i64)
+  
+  declare i64 @mult_mlint(i64, i64)
+  
+  declare i64 @div_mlint(i64, i64)
+  
+  declare i64 @l_ml(i64, i64)
+  
+  declare i64 @le_ml(i64, i64)
+  
+  declare i64 @g_ml(i64, i64)
+  
+  declare i64 @ge_ml(i64, i64)
+  
+  declare i64 @eq_ml(i64, i64)
+  
+  declare i64 @peq_ml(i64, i64)
+  
+  declare i64 @neq_ml(i64, i64)
+  
+  declare i64 @pneq_ml(i64, i64)
   
   declare i64 @print_int(i64)
   
-  define i64 @"+"(i64 %0, i64 %1) {
+  declare i64 @land_ml(i64, i64)
+  
+  declare i64 @lor_ml(i64, i64)
+  
+  declare i64 @mlrt_get_box_field(i64, i64)
+  
+  declare i64 @mlrt_check_tag(i64, i64)
+  
+  declare i64 @mltr_match_error(i64)
+  
+  declare i64 @mlrt_create_tuple(i64, ...)
+  
+  declare i64 @mlrt_create_empty_closure(i64)
+  
+  declare i64 @mlrt_apply_args_to_closure(i64, i64, ...)
+  
+  define i64 @main() {
   entry:
-    %result = add i64 %0, %1
-    ret i64 %result
+    %0 = call i64 @init_llvm()
+    %1 = call i64 @mlrt_create_empty_closure(i64 ptrtoint (ptr @ll_var_0 to i64), i64 1)
+    store i64 %1, ptr @ll_var_0_glob_llvm, align 4
+    %ll_var_1_glob_llvm = call i64 @ll_var_1()
+    store i64 %ll_var_1_glob_llvm, ptr @ll_var_1_glob_llvm, align 4
+    ret i64 0
   }
   
-  define i64 @-(i64 %0, i64 %1) {
+  define i64 @ll_var_0(i64 %0) {
   entry:
-    %result = sub i64 %0, %1
-    ret i64 %result
-  }
+    %"*" = load i64, ptr @mult_mlint_glob_llvm, align 4
+    %- = load i64, ptr @minus_mlint_glob_llvm, align 4
+    %"<=" = load i64, ptr @le_ml_glob_llvm, align 4
+    %1 = call i64 (i64, i64, ...) @mlrt_apply_args_to_closure(i64 %"<=", i64 2, i64 %0, i64 3)
+    %2 = ashr i64 %1, 1
+    %3 = trunc i64 %2 to i1
+    br i1 %3, label %5, label %6
   
-  define i64 @"*"(i64 %0, i64 %1) {
-  entry:
-    %result = mul i64 %0, %1
-    ret i64 %result
-  }
+  continue:                                         ; preds = %6, %5
+    %4 = phi i64 [ 3, %5 ], [ %9, %6 ]
+    ret i64 %4
   
-  define i64 @"/"(i64 %0, i64 %1) {
-  entry:
-    %result = udiv i64 %0, %1
-    ret i64 %result
-  }
+  5:                                                ; preds = %entry
+    br label %continue
   
-  define i64 @"<="(i64 %0, i64 %1) {
-  entry:
-    %result = icmp sle i64 %0, %1
-    %extended_result = zext i1 %result to i64
-    ret i64 %extended_result
-  }
-  
-  define i64 @">="(i64 %0, i64 %1) {
-  entry:
-    %result = icmp sge i64 %0, %1
-    %extended_result = zext i1 %result to i64
-    ret i64 %extended_result
-  }
-  
-  define i64 @"<"(i64 %0, i64 %1) {
-  entry:
-    %result = icmp slt i64 %0, %1
-    %extended_result = zext i1 %result to i64
-    ret i64 %extended_result
-  }
-  
-  define i64 @">"(i64 %0, i64 %1) {
-  entry:
-    %result = icmp sgt i64 %0, %1
-    %extended_result = zext i1 %result to i64
-    ret i64 %extended_result
-  }
-  
-  define i64 @"="(i64 %0, i64 %1) {
-  entry:
-    %result = icmp eq i64 %0, %1
-    %extended_result = zext i1 %result to i64
-    ret i64 %extended_result
-  }
-  
-  define i64 @"!="(i64 %0, i64 %1) {
-  entry:
-    %result = icmp ne i64 %0, %1
-    %extended_result = zext i1 %result to i64
-    ret i64 %extended_result
-  }
-  
-  define i64 @ll_var_0(i64 %arg_1) {
-  entry:
-    %arg_11 = alloca i64, align 8
-    store i64 %arg_1, ptr %arg_11, align 4
-    %arg_12 = load i64, ptr %arg_11, align 4
-    %indirect_calltmp = call i64 @"<="(i64 %arg_12, i64 1)
-    %anf_0 = alloca i64, align 8
-    store i64 %indirect_calltmp, ptr %anf_0, align 4
-    %anf_03 = load i64, ptr %anf_0, align 4
-    %ifcond = icmp ne i64 %anf_03, 0
-    br i1 %ifcond, label %then, label %else
-  
-  then:                                             ; preds = %entry
-    br label %ifcont
-  
-  else:                                             ; preds = %entry
-    %arg_14 = load i64, ptr %arg_11, align 4
-    %indirect_calltmp5 = call i64 @-(i64 %arg_14, i64 1)
-    %anf_1 = alloca i64, align 8
-    store i64 %indirect_calltmp5, ptr %anf_1, align 4
-    %anf_16 = load i64, ptr %anf_1, align 4
-    %calltmp = call i64 @ll_var_0(i64 %anf_16)
-    %anf_2 = alloca i64, align 8
-    store i64 %calltmp, ptr %anf_2, align 4
-    %arg_17 = load i64, ptr %arg_11, align 4
-    %anf_28 = load i64, ptr %anf_2, align 4
-    %indirect_calltmp9 = call i64 @"*"(i64 %arg_17, i64 %anf_28)
-    %anf_3 = alloca i64, align 8
-    store i64 %indirect_calltmp9, ptr %anf_3, align 4
-    %anf_310 = load i64, ptr %anf_3, align 4
-    br label %ifcont
-  
-  ifcont:                                           ; preds = %else, %then
-    %iftmp = phi i64 [ 1, %then ], [ %anf_310, %else ]
-    %anf_4 = alloca i64, align 8
-    store i64 %iftmp, ptr %anf_4, align 4
-    %anf_411 = load i64, ptr %anf_4, align 4
-    ret i64 %anf_411
+  6:                                                ; preds = %entry
+    %7 = call i64 (i64, i64, ...) @mlrt_apply_args_to_closure(i64 %-, i64 2, i64 %0, i64 3)
+    %8 = call i64 @ll_var_0(i64 %7)
+    %9 = call i64 (i64, i64, ...) @mlrt_apply_args_to_closure(i64 %"*", i64 2, i64 %0, i64 %8)
+    br label %continue
   }
   
   define i64 @ll_var_1() {
   entry:
-    %calltmp = call i64 @ll_var_0(i64 4)
-    %anf_5 = alloca i64, align 8
-    store i64 %calltmp, ptr %anf_5, align 4
-    %anf_51 = load i64, ptr %anf_5, align 4
-    %calltmp2 = call i64 @print_int(i64 %anf_51)
-    %anf_6 = alloca i64, align 8
-    store i64 %calltmp2, ptr %anf_6, align 4
-    %anf_63 = load i64, ptr %anf_6, align 4
-    ret i64 0
+    %0 = call i64 @ll_var_0(i64 9)
+    %1 = call i64 @print_int(i64 %0)
+    ret i64 1
   }
+
+  $ lli -load ../../lib/runtime.so output.ll
+  24
+
+  $ ./LlvmCodegenRunner.exe < manytests/typed/002fac.ml
+  $ lli -load ../../lib/runtime.so output.ll
+  24
+
+  $ ./LlvmCodegenRunner.exe < manytests/typed/003fib.ml
+  $ lli -load ../../lib/runtime.so output.ll
+  3
+  3
+
+  $ ./LlvmCodegenRunner.exe < manytests/typed/004manyargs.ml
+  $ lli -load ../../lib/runtime.so output.ll
+  1111111111
+  1
+  10
+  100
+
+  $ ./LlvmCodegenRunner.exe < manytests/typed/005fix.ml
+  $ lli -load ../../lib/runtime.so output.ll
+  720
+
+  $ ./LlvmCodegenRunner.exe < manytests/typed/006partial.ml
+  $ lli -load ../../lib/runtime.so output.ll
+  1122
   
-  define i64 @main() {
-  entry:
-    %main_result = call i64 @ll_var_1()
-    ret i64 %main_result
-  }
+  $ ./LlvmCodegenRunner.exe < manytests/typed/006partial2.ml
+  $ lli -load ../../lib/runtime.so output.ll
+  1237
+
+  $ ./LlvmCodegenRunner.exe < manytests/typed/006partial3.ml
+  $ lli -load ../../lib/runtime.so output.ll
+  4
+  8
+  9
+
+  $ ./LlvmCodegenRunner.exe < manytests/typed/007order.ml
+  $ lli -load ../../lib/runtime.so output.ll
+  -1
+  4
+  2
+  1
+  103
+  -555555
+  10000
+
+
+  $ ./LlvmCodegenRunner.exe < manytests/typed/008ascription.ml
+  $ lli -load ../../lib/runtime.so output.ll
+  8
+
+
