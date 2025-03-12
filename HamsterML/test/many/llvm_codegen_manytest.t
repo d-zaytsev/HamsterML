@@ -114,7 +114,7 @@
     ret i64 %0
   }
  
-  $ lli -load ../../lib/runtime.so output.ll
+  $ lli-16 -load ../../lib/runtime.so output.ll
   1
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/001fac.ml
@@ -259,48 +259,48 @@
     ret i64 1
   }
 
-  $ lli -load ../../lib/runtime.so output.ll
+  $ lli-16 -load ../../lib/runtime.so output.ll
   24
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/002fac.ml
-  $ lli -load ../../lib/runtime.so output.ll
+  $ lli-16 -load ../../lib/runtime.so output.ll
   24
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/003fib.ml
-  $ lli -load ../../lib/runtime.so output.ll
+  $ lli-16 -load ../../lib/runtime.so output.ll
   3
   3
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/004manyargs.ml
-  $ lli -load ../../lib/runtime.so output.ll
+  $ lli-16 -load ../../lib/runtime.so output.ll
   1111111111
   1
   10
   100
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/005fix.ml
-  $ lli -load ../../lib/runtime.so output.ll
+  $ lli-16 -load ../../lib/runtime.so output.ll
   720
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/006partial.ml
-  $ lli -load ../../lib/runtime.so output.ll
+  $ lli-16 -load ../../lib/runtime.so output.ll
   1122
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/006partial2.ml
-  $ lli -load ../../lib/runtime.so output.ll
+  $ lli-16 -load ../../lib/runtime.so output.ll
   1
   2
   3
   7
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/006partial3.ml
-  $ lli -load ../../lib/runtime.so output.ll
+  $ lli-16 -load ../../lib/runtime.so output.ll
   4
   8
   9
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/007order.ml
-  $ lli -load ../../lib/runtime.so output.ll
+  $ lli-16 -load ../../lib/runtime.so output.ll
   -1
   4
   2
@@ -311,7 +311,5 @@
 
 
   $ ./LlvmCodegenRunner.exe < manytests/typed/008ascription.ml
-  $ lli -load ../../lib/runtime.so output.ll
+  $ lli-16 -load ../../lib/runtime.so output.ll
   8
-
-
