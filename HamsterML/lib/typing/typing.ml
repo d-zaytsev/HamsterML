@@ -407,6 +407,7 @@ module Infer = struct
     | PInt -> return (Subst.empty, TInt)
     | PBool -> return (Subst.empty, TBool)
     | PString -> return (Subst.empty, TString)
+    | _ -> failwith "пока что не умею"
   ;;
 
   let infer_pattern (env : TypeEnv.t) (v : Ast.pattern) : (TypeEnv.t * inf_type) R.t =

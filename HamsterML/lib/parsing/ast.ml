@@ -12,6 +12,11 @@ type dataType =
   | PInt
   | PBool
   | PString
+  | PUnit
+  | PVar of id
+  | PList of dataType
+  | PTuple of dataType list
+  | PArrow of dataType * dataType
 [@@deriving show]
 
 type bop =

@@ -25,6 +25,11 @@ type dataType =
   | PInt (* Integer type *)
   | PBool (* Boolean type *)
   | PString (* String type *)
+  | PUnit
+  | PVar of id
+  | PList of dataType
+  | PTuple of dataType list
+  | PArrow of dataType * dataType
 
 (* Pretty-print a data type *)
 val pp_dataType : Format.formatter -> dataType -> unit
