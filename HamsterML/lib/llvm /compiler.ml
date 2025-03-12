@@ -1,6 +1,6 @@
 open Ast
 open Typing
-open Statement
+open Compiler_utils
 open Anf
 
 let the_context = Llvm.global_context ()
@@ -447,14 +447,14 @@ let create_main : Llvm.llvalue -> anf_prog -> (state, unit) t =
   *> return ()
 ;;
 
-let start_compile : anf_prog -> (state, unit) t =
+let start_codegen : anf_prog -> (state, unit) t =
   fun prog ->
   let* init_fun = declare_all_std_funs () *> create_init () in
   create_main init_fun prog
 ;;
 
-let compile out_name prog =
-  let _, res = run (start_compile prog) ("", MapString.empty, MapString.empty) in
+let codegen out_name prog =
+  let _, res = run (start_codegen prog) ("", MapString.empty, MapString.empty) in
   match res with
   | Ok _ -> Llvm.print_module out_name the_module
   | Error e -> Format.printf "Get error: %s" e

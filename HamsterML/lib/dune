@@ -15,11 +15,9 @@
   LL
   ME
   Utils
-  ;; common
-  StateMonad
   ;; llvm directory
   Compiler
-  Statement
+  Compiler_utils
   ;; pretty_printers directory
   PrinterAst
   PrinterAnf

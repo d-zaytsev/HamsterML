@@ -1,1 +1,1 @@
-val compile : string -> Anf.anf_prog -> unit
+val codegen : string -> Anf.anf_prog -> unit

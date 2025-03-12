@@ -3,7 +3,7 @@ open HamsterTest.AnfTest
 
 let compile_program str =
   let anf = anf_prog str in
-  compile "output.ll" anf
+  codegen "output.ll" anf
 ;;
 
 let () =
